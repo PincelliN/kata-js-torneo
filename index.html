@@ -109,6 +109,59 @@
           power: 250,
         },
       ];
+
+      let fightersWeapons = [];
+      for (let index = 0; index < fighters.length; index++) {
+        let element = fighters[index];
+        let elementWeapon = weapons[index];
+        element.weapons = elementWeapon;
+        fightersWeapons.push(element);
+      }
+      console.log(fightersWeapons);
+
+      fightersWeapons.forEach(
+        (x) => (x.power = x.power * (Math.floor(Math.random() * 100) + 1))
+      );
+      let qualified = fightersWeapons.filter(
+        (x) => parseInt(x.power) + parseInt(x.weapons.power) > 2000
+      );
+
+      if (qualified.length % 2 != 0) {
+        let bot = { name: "Robot", power: 4000 };
+        qualified.push(bot);
+      }
+      console.log(qualified);
+      let matchs = [];
+      let start = 0;
+      let end = 2;
+      while (end <= qualified.length) {
+        let match = qualified.slice(start, end);
+
+        matchs.push(match);
+        start += 2;
+        end += 2;
+      }
+
+      console.log(matchs, matchs[0]);
+      let winFirst = [];
+      for (let index = 0; index < matchs.length; index++) {
+        winFirst = matchs[index];
+        if (
+          parseInt(matchs[index][0].power) +
+            (matchs[index][0].weapons.power
+              ? parseInt(matchs[index][0].weapons.power)
+              : 0) >
+          parseInt(matchs[index][1].power) +
+            (matchs[index][1].weapons.power
+              ? parseInt(matchs[index][1].weapons.power)
+              : 0)
+        ) {
+          winFirst.push([index][0]);
+        } else {
+          winFirst.push([index][1]);
+        }
+      }
+      console.log(winFirst);
     </script>
   </body>
 </html>
