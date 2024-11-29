@@ -6,7 +6,6 @@
     <title>kata-js-torneo</title>
   </head>
   <body>
-    ciao
     <script>
       const fighters = [
         {
@@ -110,27 +109,34 @@
         },
       ];
 
-      let fightersWeapons = [];
+      //assegno a ogni guerriero un arma
+      const weaponsFighers = weapons;
       for (let index = 0; index < fighters.length; index++) {
         let element = fighters[index];
-        let elementWeapon = weapons[index];
-        element.weapons = elementWeapon;
-        fightersWeapons.push(element);
+        let random = Math.floor(Math.random() * weaponsFighers.length);
+        element.weapon = weaponsFighers[random];
+        weaponsFighers.splice(random, 1);
       }
-      console.log(fightersWeapons);
+      /* console.log(fighters); */
 
-      fightersWeapons.forEach(
-        (x) => (x.power = x.power * (Math.floor(Math.random() * 100) + 1))
+      //alleno ogni combattente
+      fighters.forEach(
+        (x) =>
+          (x.power =
+            x.power * (Math.floor(Math.random() * 100) + 1) + x.weapon.power)
       );
-      let qualified = fightersWeapons.filter(
-        (x) => parseInt(x.power) + parseInt(x.weapons.power) > 2000
-      );
+      console.log(fighters);
 
+      //qualificazioni
+      let qualified = fighters.filter((x) => parseInt(x.power) > 2000);
+      //se i combattenti sono dispari aggiungo un jolly
       if (qualified.length % 2 != 0) {
         let bot = { name: "Robot", power: 4000 };
         qualified.push(bot);
       }
       console.log(qualified);
+
+      // divido i qualificati in team da due
       let matchs = [];
       let start = 0;
       let end = 2;
@@ -142,26 +148,31 @@
         end += 2;
       }
 
-      console.log(matchs, matchs[0]);
+      console.log(matchs);
+      //stabilisco il vincitore per ogni match
       let winFirst = [];
+
       for (let index = 0; index < matchs.length; index++) {
-        winFirst = matchs[index];
         if (
-          parseInt(matchs[index][0].power) +
-            (matchs[index][0].weapons.power
-              ? parseInt(matchs[index][0].weapons.power)
-              : 0) >
-          parseInt(matchs[index][1].power) +
-            (matchs[index][1].weapons.power
-              ? parseInt(matchs[index][1].weapons.power)
-              : 0)
+          Number(matchs[index][0].power) > Number(matchs[index][1].power) ||
+          Number(matchs[index][0].power) == Number(matchs[index][1].power)
         ) {
-          winFirst.push([index][0]);
+          winFirst.push(matchs[index][0]);
         } else {
-          winFirst.push([index][1]);
+          winFirst.push(matchs[index][1]);
         }
       }
+
+      // ordino in base alla potenza
+      winFirst.sort((a, b) => b.power - a.power);
       console.log(winFirst);
+
+      //assegno il podio
+
+      const fist = winFirst[0];
+      const second = winFirst[1];
+      const third = winFirst[3];
+      console.log(fist.name, second.name, third.name);
     </script>
   </body>
 </html>
